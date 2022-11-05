@@ -2,9 +2,11 @@ package org.example.service;
 
 import org.example.container.ComponentContainer;
 import org.example.dto.Card;
+import org.example.dto.Terminal;
 import org.example.dto.Transaction;
 import org.example.enums.TransactionType;
 import org.example.repository.CardRepository;
+import org.example.repository.TerminalRepository;
 import org.example.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +18,14 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final CardRepository cardRepository;
+    private final TerminalRepository terminalRepository;
 
 
-    public TransactionService(TransactionRepository transactionRepository, CardRepository cardRepository) {
+    public TransactionService(TransactionRepository transactionRepository, CardRepository cardRepository, TerminalRepository terminalRepository) {
         this.transactionRepository = transactionRepository;
         this.cardRepository = cardRepository;
+        this.terminalRepository = terminalRepository;
     }
-
-
-
 
     public void get_transaction_list() {
 
@@ -52,8 +53,7 @@ public class TransactionService {
             System.out.println("This card is not yours");
             return;
         }
-
-        int i = transactionRepository.profile_refill(number, amount);
+        int i = cardRepository.refillCard(amount, number);
 
         if (i == 0) {
             System.out.println("Failed");
@@ -87,8 +87,13 @@ public class TransactionService {
             return;
         }
 
+        Terminal terminal = terminalRepository.getTerminal(transaction.getTerminal_code());
+        if (terminal == null) {
+            System.out.println("Terminal is not exists");
+            return;
+        }
 
-        int i = transactionRepository.make_payment(transaction,ComponentContainer.currentProfile.getPhone());
+        int i = transactionRepository.make_payment(transaction, ComponentContainer.currentProfile.getPhone());
 
 
     }

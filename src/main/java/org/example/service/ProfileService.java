@@ -11,7 +11,6 @@ import org.example.repository.ProfileRepository;
 import org.example.util.MD5;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class ProfileService {

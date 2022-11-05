@@ -1,20 +1,17 @@
 package org.example.controller.user;
 
-import org.example.container.ComponentContainer;
-import org.example.dto.Profile_Card;
-import org.example.service.Profile_Card_Service;
+import org.example.service.CardService;
 import org.example.util.ScannerUtil;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
 import java.util.Scanner;
 
 @Controller
 public class UserCardController {
-    private final Profile_Card_Service profile_card_service;
+    private final CardService  cardService;
 
-    public UserCardController(Profile_Card_Service profile_card_service) {
-        this.profile_card_service = profile_card_service;
+    public UserCardController(CardService cardService) {
+        this.cardService = cardService;
     }
 
     public void start() {
@@ -41,7 +38,7 @@ public class UserCardController {
         System.out.println("Enter card number: ");
         String number = scanner.next();
 
-        profile_card_service.delete_profile_card(ComponentContainer.currentProfile.getPhone(), number);
+        cardService.delete_profile_card(number);
     }
 
     private void card_change_status() {
@@ -51,12 +48,12 @@ public class UserCardController {
         System.out.println("Enter card number: ");
         String number = scanner.next();
 
-        profile_card_service.change_profile_card_status(ComponentContainer.currentProfile.getPhone(), number);
+        cardService.changeStatus_user(number);
 
     }
 
     private void card_list() {
-        profile_card_service.get_profile_card_list(ComponentContainer.currentProfile.getPhone());
+        cardService.get_profile_card_list();
     }
 
     private void add_card() {
@@ -65,9 +62,8 @@ public class UserCardController {
         System.out.println("Enter card number: ");
         String number = scanner.next();
 
-        Profile_Card profile_card = new Profile_Card(ComponentContainer.currentProfile.getPhone(), number, LocalDateTime.now());
 
-        profile_card_service.addCard_to_User(profile_card);
+        cardService.addCard_to_User(number);
 
 
     }

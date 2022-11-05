@@ -88,7 +88,7 @@ public class AdminCardController {
         System.out.print("Enter card number: ");
         String number = scanner.next();
 
-        cardService.changeStatus(number);
+        cardService.changeStatus_admin(number);
 
 
     }

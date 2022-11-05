@@ -55,7 +55,7 @@ public class AuthController {
         System.out.print("Enter password:");
         String password = scanner.next();
 
-        Profile profile = new Profile(name, surname, phone, MD5.md5(password), LocalDateTime.now(), GeneralStatus.ACTIVE, ProfileRole.USER);
+        Profile profile = new Profile(null,name, surname, phone, MD5.md5(password), LocalDateTime.now(), GeneralStatus.ACTIVE, ProfileRole.USER);
 
         profileService.addProfile(profile);
 

@@ -16,8 +16,6 @@ public class Main {
         dataBase.createTable();
 
         AuthController authController = (AuthController) applicationContext.getBean("authController");
-
-
         authController.start();
 
     }

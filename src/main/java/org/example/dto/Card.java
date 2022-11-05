@@ -13,6 +13,7 @@ public class Card {
     private GeneralStatus status;
     private String phone;
     private LocalDateTime created_date;
+    private LocalDateTime added_date;
 
     public Card() {
     }
@@ -26,6 +27,17 @@ public class Card {
         this.created_date = created_date;
     }
 
+    public Card(Integer id, String number, LocalDate exp_date, Long balance, GeneralStatus status, String phone, LocalDateTime created_date, LocalDateTime added_date) {
+        this.id = id;
+        this.number = number;
+        this.exp_date = exp_date;
+        this.balance = balance;
+        this.status = status;
+        this.phone = phone;
+        this.created_date = created_date;
+        this.added_date = added_date;
+    }
+
     public Card(Integer id, String number, LocalDate exp_date, Long balance, GeneralStatus status, String phone, LocalDateTime created_date) {
         this.id = id;
         this.number = number;
@@ -35,6 +47,7 @@ public class Card {
         this.phone = phone;
         this.created_date = created_date;
     }
+
 
     public Integer getId() {
         return id;
@@ -92,6 +105,14 @@ public class Card {
         this.created_date = created_date;
     }
 
+    public LocalDateTime getAdded_date() {
+        return added_date;
+    }
+
+    public void setAdded_date(LocalDateTime added_date) {
+        this.added_date = added_date;
+    }
+
     @Override
     public String toString() {
         return "Card{" +
@@ -102,6 +123,7 @@ public class Card {
                 ", status=" + status +
                 ", phone='" + phone + '\'' +
                 ", created_date=" + created_date +
+                ", added_date=" + added_date +
                 '}';
     }
 }

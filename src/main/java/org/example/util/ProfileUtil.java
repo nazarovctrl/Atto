@@ -14,7 +14,7 @@ public class ProfileUtil {
     public static Profile get_profile(ResultSet resultSet) {
 
         try {
-            int id = resultSet.getInt("id");
+            long id = resultSet.getInt("id");
 
             String name = resultSet.getString("name");
             String surname = resultSet.getString("surname");

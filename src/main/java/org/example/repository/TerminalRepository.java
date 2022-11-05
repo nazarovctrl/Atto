@@ -1,215 +1,60 @@
 package org.example.repository;
 
-import org.example.db.DataBase;
 import org.example.dto.Terminal;
-import org.example.util.TerminalUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.LinkedList;
+
+import java.sql.Timestamp;
 import java.util.List;
 
 @Repository
 public class TerminalRepository {
+    private final JdbcTemplate jdbcTemplate;
+
+    public TerminalRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     public int addTerminalToDb(Terminal terminal) {
-
-
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement(
-                    "insert into terminal(code,address,created_date,status) " +
-                            "values (?,?,?,?)");
-            statement.setString(1, terminal.getCode());
-            statement.setString(2, terminal.getAddress());
-            statement.setTimestamp(3, Timestamp.valueOf(terminal.getCreated_date()));
-            statement.setString(4, terminal.getStatus().name());
-
-            int resultSet = statement.executeUpdate();
-            return resultSet;
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-
-        return 0;
-
+        String sql = "insert into terminal(code,address,created_date,status) " +
+                "values (?,?,?,?)";
+        return jdbcTemplate.update(sql, terminal.getCode(), terminal.getAddress(), Timestamp.valueOf(terminal.getCreated_date()), terminal.getStatus().name());
     }
 
 
     public Terminal getTerminal(String code) {
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement("select * from terminal where code=?");
-            statement.setString(1, code);
+        String sql = "select count(*) from terminal where code='" + code + "' ;";
 
-            ResultSet resultSet = statement.executeQuery();
+        int integer = jdbcTemplate.queryForObject(sql, Integer.class);
 
-            while (resultSet.next()) {
-
-                return TerminalUtil.get_terminal(resultSet);
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
+        if (integer == 0) {
+            return null;
         }
-
-        return null;
+        sql = "select * from terminal where code='" + code + "' ;";
+        ;
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Terminal.class));
     }
 
     public List<Terminal> get_terminal_list_fromDb() {
-
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement("select * from terminal ");
-
-
-            ResultSet resultSet = statement.executeQuery();
-
-            List<Terminal> terminals = new LinkedList<>();
-            while (resultSet.next()) {
-                terminals.add(TerminalUtil.get_terminal(resultSet));
-            }
-
-            return terminals;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-
-        return null;
+        String sql = "select * from terminal ";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Terminal.class));
     }
 
     public int updateTerminal_address_fromDB(String code, String address) {
-
-
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement("update terminal set address=? where code=? ;");
-            statement.setString(1, address);
-            statement.setString(2, code);
-
-            int resultSet = statement.executeUpdate();
-
-            return resultSet;
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-
-        return 0;
-
-
+        String sql = "update terminal set address=? where code=? ;";
+        return jdbcTemplate.update(sql, address, code);
     }
 
     public int changeTerminal_status_fromDB(String code, String status) {
-
-
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement("update terminal set status=? where code=? ;");
-            statement.setString(1, status);
-            statement.setString(2, code);
-
-            int resultSet = statement.executeUpdate();
-
-            return resultSet;
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-
-        return 0;
-
-
+        String sql = "update terminal set status=? where code=? ;";
+        return jdbcTemplate.update(sql, status, code);
     }
 
     public int deleteTerminal_fromDb(String code) {
-        Connection connection = DataBase.getConnection();
-        try {
-            PreparedStatement statement = connection.prepareStatement("delete from terminal where code=? ;");
-
-            statement.setString(1, code);
-
-            int resultSet = statement.executeUpdate();
-
-            return resultSet;
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-
-        return 0;
+        String sql = "delete from terminal where code=? ;";
+        return jdbcTemplate.update(sql, code);
     }
 }

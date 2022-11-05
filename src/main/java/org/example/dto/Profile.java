@@ -2,13 +2,16 @@ package org.example.dto;
 
 import org.example.enums.GeneralStatus;
 import org.example.enums.ProfileRole;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class Profile {
+public class Profile  {
 //    name,surname,phone unique,pswd,created_date,status,role
 
-    private Integer id;
+    private Long id;
     private String name;
     private String surname;
     private String phone;
@@ -20,18 +23,7 @@ public class Profile {
     public Profile() {
     }
 
-    public Profile(String name, String surname, String phone, String password, LocalDateTime created_date, GeneralStatus status, ProfileRole role) {
-        this.name = name;
-        this.surname = surname;
-        this.phone = phone;
-        this.password = password;
-        this.created_date = created_date;
-        this.status = status;
-        this.role = role;
-    }
-
-
-    public Profile(Integer id, String name, String surname, String phone, String password, LocalDateTime created_date, GeneralStatus status, ProfileRole role) {
+    public Profile(Long id, String name, String surname, String phone, String password, LocalDateTime created_date, GeneralStatus status, ProfileRole role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -98,11 +90,11 @@ public class Profile {
         this.role = role;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -119,4 +111,5 @@ public class Profile {
                 ", role=" + role +
                 '}';
     }
+
 }
